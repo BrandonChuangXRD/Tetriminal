@@ -2,6 +2,7 @@ import os
 import options.options as options
 import order
 import argparse
+import gamemodes.zen as zen
 
 CONTROLS_SOURCE = "options/controls.json"
 HANDLING_SOURCE = "options/handling.json"
@@ -32,8 +33,15 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--options", "-o", action="store_true", help="options the options menu")
-    parser.add_argument("")
-
+    parser.add_argument("--zen", "-z", action="store_true", help="starts the zen gamemode (default)")
+    args = parser.parse_args()
+    if args.options:
+        print("TODO: not implemented")
+        return
+    elif args.zen:
+        zen.start()
+    else:
+        zen.start()
     return 0
 
 
