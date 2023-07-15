@@ -6,13 +6,12 @@ class HandlingScheme():
     def __init__(self, ARR = 2, DAS = 10, DCD = 0, SDF = 6, DAS_DC = False, HDL = True):
         self.ARR = ARR
         self.DAS = DAS
-        self.DCD = DCD
+        self.DCD = DCD #Cancel DAS upon changing direction
         self.SDF = SDF
-        self.DAS_DC = DAS_DC #Cancel DAS upon changing direction
         self.HDL = HDL #Hard Drop Lockout
     
     def serialize(self):
-        jsobj = {"ARR": self.ARR, "DAS": self.DAS, "DCD": self.DCD, "SDF": self.SDF, "DAS_DC": self.DAS_DC, "HDL": self.HDL}
+        jsobj = {"ARR": self.ARR, "DAS": self.DAS, "DCD": self.DCD, "SDF": self.SDF, "HDL": self.HDL}
         return json.dumps(jsobj, indent = 4)
     
     def deserialize(self, jsfile):
@@ -24,7 +23,6 @@ class HandlingScheme():
         self.DAS = jsdict["DAS"]
         self.DCD = jsdict["DCD"]
         self.SDF = jsdict["SDF"]
-        self.DAS_DC = jsdict["DAS_DC"]
         self.HDL = jsdict["HDL"]
 
 #change this to take in strings instead of ints.
@@ -68,5 +66,4 @@ class ControlScheme():
         self.counterclockwise = jsdict["counterclockwise"]
         self.one_eighty = jsdict["one_eighty"]
         self.hold = jsdict["hold"]
-    
     
