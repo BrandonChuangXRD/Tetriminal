@@ -4,6 +4,7 @@ import order
 import argparse
 import screen
 import gamemodes.zen as zen
+import gamemodes.debug as debug
 
 CONTROLS_SOURCE = "options/controls.json"
 HANDLING_SOURCE = "options/handling.json"
@@ -31,6 +32,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--options", "-o", action="store_true", help="options the options menu")
     parser.add_argument("--zen", "-z", action="store_true", help="starts the zen gamemode (default)")
+    parser.add_argument("--debug", "-d", action="store_true", help="activate debug mode")
     args = parser.parse_args()
     if args.options:
         screen.options_display()
@@ -41,6 +43,8 @@ def main():
 
     handle = options.HandlingScheme()
     handle = handle.deserialize(HANDLING_SOURCE)
+    if args.debug:
+        debug.start()
     if args.zen:
         zen.start()
     else:
