@@ -15,3 +15,7 @@ def fourteenbag():
         random.shuffle(bag)
         while len(bag) != 0:
             yield bag.pop()
+
+def insanity():
+    while True:
+        yield random.choice(pieces)

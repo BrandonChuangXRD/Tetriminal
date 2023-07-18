@@ -72,8 +72,15 @@ class game_display():
         curses.init_pair(9, curses.COLOR_BLACK, curses.COLOR_WHITE)
         curses.init_pair(10, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(11, curses.COLOR_RED, curses.COLOR_BLACK)
-        COLOR_CODES =     {"s": (MINOCHAR, curses.color_pair(2)),
-                           "z": (MINOCHAR, curses.color_pair(3)),
+        curses.init_pair(52, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(53, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(54, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
+        curses.init_pair(55, curses.COLOR_RED, curses.COLOR_BLACK)
+        curses.init_pair(56, curses.COLOR_BLUE, curses.COLOR_BLACK)
+        curses.init_pair(57, curses.COLOR_CYAN, curses.COLOR_BLACK)
+        curses.init_pair(58, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        COLOR_CODES =     {"z": (MINOCHAR, curses.color_pair(2)),
+                           "s": (MINOCHAR, curses.color_pair(3)),
                            "t": (MINOCHAR, curses.color_pair(4)),
                            "l": (MINOCHAR, curses.color_pair(5) | curses.A_HORIZONTAL), # TODO no good color for orange. quick-ish workaround.
                            "j": (MINOCHAR, curses.color_pair(6)),
@@ -118,9 +125,36 @@ class game_display():
     
     # TODO
     #at start, needs to be empty
-    def update_hold(self):
+    #right justified
+    def update_hold(self, piece = None):
+        text = "HOLD"
+        #"HOLD" text at the top
+        textpos_y = (self.display_height//2)-(self.grid_height//2)+4
+        textpos_x = (self.display_length//2)-self.grid_length-6 #-1 for the border, -4 for the text length
+        textwin = curses.newwin(2, 5, textpos_y, textpos_x)
+        textwin.addstr("HOLD")
+        textwin.refresh()
+        #next piece, make it just T for now
+        if piece is not None:
+            piecewin = curses.newwin(3, 8, textpos_y+2, textpos_x-4)
+            if piece == "t":
+                piecewin.addstr(("    ██    ██████"), curses.color_pair(54))
+            elif piece == "j":
+                piecewin.addstr(("  ██      ██████"), curses.color_pair(56))
+            elif piece == "l":
+                piecewin.addstr(("      ██  ██████"), curses.color_pair(55))
+            elif piece == "s":
+                piecewin.addstr(("    ████  ████  "), curses.color_pair(53))
+            elif piece == "z":
+                piecewin.addstr(("  ████      ████"), curses.color_pair(52))
+            elif piece == "o":
+                piecewin.addstr(("  ████    ████  "), curses.color_pair(58))
+            elif piece == "i":
+                piecewin.addstr(("        ████████"), curses.color_pair(57))
+            piecewin.refresh()
         return 0
     
+    #! You might want to just make this a window.
     #just rerender the entire thing for now, its possible to make a system where it only updates required pixels.
     def update_board(self, grid):
         #print("grid:")
@@ -132,11 +166,6 @@ class game_display():
         self.grid_pad = curses.newpad(self.display_height+1, self.display_length+1)
         # TODO Fill in the pad, one pixel at a time (will need to be replaced to make the board larger)
         #make sure to account for the hidden rows.
-        #print("self grid height:", self.grid_height)
-        #print("self grid length:", self.grid_length)
-        #print("grid height: ", len(grid))
-        #print("grid length", len(grid[0]))
-        #print()
         for y in range(self.grid_height-1, -1, -1):
             for x in range(self.grid_length):
                 #grid will be in reversed order
