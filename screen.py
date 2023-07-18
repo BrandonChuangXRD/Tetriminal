@@ -5,38 +5,17 @@ import curses
 
 #TODO terminal must be big enough to display at least the grid
 #TODO minimum for now: length 30 height 25
+#TODO a grid border could be cool.
 #! it would be very nice to have a double wide version, blocks being 2x3 to make it more square
-MINOCHAR =  "▊"
+MINOCHAR =  "█"
 BACKUPS = "▊ █" 
 
 
-# ! This is terrible. throw this in color_init later.
-curses.init_pair(2, curses.COLOR_RED, curses.COLOR_WHITE)
-curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_WHITE)
-curses.init_pair(4, curses.COLOR_MAGENTA, curses.COLOR_WHITE)
-curses.init_pair(5, curses.COLOR_RED, curses.COLOR_WHITE)
-curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_WHITE)
-curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_WHITE)
-curses.init_pair(8, curses.COLOR_YELLOW, curses.COLOR_WHITE)
-curses.init_pair(9, curses.COLOR_BLACK, curses.COLOR_WHITE)
-curses.init_pair(10, curses.COLOR_WHITE, curses.COLOR_BLACK)
-curses.init_pair(11, curses.COLOR_RED, curses.COLOR_BLACK)
 
 #use the splat operator for this: https://www.geeksforgeeks.org/python-passing-dictionary-as-arguments-to-function/#
 # ch: _ChType, attr: int = ...
 
-COLOR_CODES = {
-    "s": (MINOCHAR, curses.init_pair(2)),
-    "z": (MINOCHAR, curses.init_pair(3)),
-    "t": (MINOCHAR, curses.init_pair(4)),
-    "l": (MINOCHAR, curses.init_pair(5) | curses.A_HORIZONTAL), # TODO no good color for orange. quick-ish workaround.
-    "j": (MINOCHAR, curses.init_pair(6)),
-    "i": (MINOCHAR, curses.init_pair(7)),
-    "o": (MINOCHAR, curses.init_pair(8)),
-    "e": (MINOCHAR, curses.init_pair(9)),
-    "g": (MINOCHAR, curses.init_pair(10)),
-    "x": ("X", curses.init_pair(11))
-}
+COLOR_CODES = {}
 
 #pieces spawn at a minimum height of 21 (two above the end)
 #2 extra rows are displayed above "height"
@@ -78,9 +57,33 @@ class game_display():
     # TODO
     def color_init(self):
         #need three routes for no color, color, fancy custom colors
-        if curses.can_change_color():
-            return True
-        return False
+        if not curses.can_change_color():
+            return False
+        global COLOR_CODES
+        curses.start_color()
+        curses.use_default_colors()
+        curses.init_pair(2, curses.COLOR_RED, curses.COLOR_WHITE)
+        curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_WHITE)
+        curses.init_pair(4, curses.COLOR_MAGENTA, curses.COLOR_WHITE)
+        curses.init_pair(5, curses.COLOR_RED, curses.COLOR_WHITE)
+        curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_WHITE)
+        curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_WHITE)
+        curses.init_pair(8, curses.COLOR_YELLOW, curses.COLOR_WHITE)
+        curses.init_pair(9, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(10, curses.COLOR_WHITE, curses.COLOR_BLACK)
+        curses.init_pair(11, curses.COLOR_RED, curses.COLOR_BLACK)
+        COLOR_CODES =     {"s": (MINOCHAR, curses.color_pair(2)),
+                           "z": (MINOCHAR, curses.color_pair(3)),
+                           "t": (MINOCHAR, curses.color_pair(4)),
+                           "l": (MINOCHAR, curses.color_pair(5) | curses.A_HORIZONTAL), # TODO no good color for orange. quick-ish workaround.
+                           "j": (MINOCHAR, curses.color_pair(6)),
+                           "i": (MINOCHAR, curses.color_pair(7)),
+                           "o": (MINOCHAR, curses.color_pair(8)),
+                           "e": (MINOCHAR, curses.color_pair(9)),
+                           "g": (MINOCHAR, curses.color_pair(10)),
+                           "x": ("X", curses.color_pair(11))} # TODO this one should probably be "><" instead of two x's next to each other.
+
+        return True
 
     def start(self, grid = [], leftinfo = [], queue = []):
         self.disp = curses.initscr()
@@ -96,7 +99,7 @@ class game_display():
         #determine the minimum terminal size and confirm sizing
         self.display_height, self.display_length = self.disp.getmaxyx()
         #! Temporary fix, not tested
-        if self.terminal_change() == 1:
+        if self.terminal_change() == False:
             self.kill()
             print("Terminal size is too small")
             return 1
@@ -108,6 +111,8 @@ class game_display():
 
     # TODO
     #just rerender the entire thing for now
+    #start with information going bottom up
+    #the hold spot should only be 4 characters tall.
     def update_info(self):
         return 0
     
@@ -118,20 +123,30 @@ class game_display():
     
     #just rerender the entire thing for now, its possible to make a system where it only updates required pixels.
     def update_board(self, grid):
+        #print("grid:")
+        #print(grid)
         center_height = self.display_height//2
         center_length = self.display_length//2
-        self.grid_pad = curses.newpad(self.grid_length, self.grid_height)
+        #adding one is the only way I can get it not to crash. I don't know why,
+        #but python doc shows this
+        self.grid_pad = curses.newpad(self.display_height+1, self.display_length+1)
         # TODO Fill in the pad, one pixel at a time (will need to be replaced to make the board larger)
         #make sure to account for the hidden rows.
+        #print("self grid height:", self.grid_height)
+        #print("self grid length:", self.grid_length)
+        #print("grid height: ", len(grid))
+        #print("grid length", len(grid[0]))
+        #print()
         for y in range(self.grid_height-1, -1, -1):
             for x in range(self.grid_length):
                 #grid will be in reversed order
                 g_y = self.grid_height-y
-                self.grid_pad.addch(y, x, *COLOR_CODES[grid[g_y, x]])
+                self.grid_pad.addch(y, x*2, *COLOR_CODES[grid[g_y][x]])
+                self.grid_pad.addch(y, x*2+1, *COLOR_CODES[grid[g_y][x]])
         #refresh at the correct place
         self.grid_pad.refresh(0, 0, #start of pad
-                              center_height-(self.grid_height//2), center_length-(self.grid_length//2), #top left corner of window
-                              center_height+((self.grid_height+1)//2), center_length+((self.grid_length+1)//2)) #bottom right corner of window
+                              center_height-(self.grid_height//2), center_length-self.grid_length, #top left corner of window
+                              center_height+((self.grid_height+1)//2), center_length+self.grid_length+1) #bottom right corner of window
         return 0
     
     # TODO

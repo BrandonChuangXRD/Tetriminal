@@ -1,10 +1,10 @@
 import random
 
 #'g' stands for ghost piece and 'e' stands for empty
-states = ["s", "z", "l", "j", "o", "t", "i", "e", "g"]
+states = ["s", "z", "l", "j", "o", "t", "i", "e", "g", "x"]
 
 
-def Board():
+class Board():
     def __init__(self, length=10, height=20, hidden=12):
         self.length = length
         self.height = height

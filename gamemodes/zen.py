@@ -1,8 +1,10 @@
 import curses
-from ..options import options
-from .. import board
-from .. import screen
-from ..rotation import nrs
+import sys
+sys.path.append("..")
+import options
+import board
+import screen
+from rotation import nrs
 
 CONTROLS_SOURCE = "../options/controls.json"
 HANDLING_SOURCE = "../options/handling.json"
