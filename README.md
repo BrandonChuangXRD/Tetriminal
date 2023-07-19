@@ -8,3 +8,4 @@ DCD: 0F
 SDF: 6x
 DAS Direction Cancel: on
 Prevent accidental Hard Drops: on
+a
