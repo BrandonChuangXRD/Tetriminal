@@ -19,11 +19,17 @@ def start():
     for _ in range(5):
         q.append(next(queueorder)) 
     # TODO break if "q" is pressed
+    last_update = time.time()-1
     while True:
-        time.sleep(1) #! cannot be used later
-        b.random_grid() 
-        disp.update_board(b.grid)
-        disp.update_hold(next(holdorder))
-        disp.update_queue(q)
-        q.pop(0)
-        q.append(next(queueorder))
+        k = disp.get_keypresses()
+        if ord("q") in k:
+            disp.kill()
+            return 0
+        if time.time() > last_update+1:
+            last_update +=1
+            b.random_grid() 
+            disp.update_board(b.grid)
+            disp.update_hold(next(holdorder))
+            disp.update_queue(q)
+            q.pop(0)
+            q.append(next(queueorder))

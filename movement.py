@@ -10,7 +10,7 @@ RIGHT = 1
 SOFT_DROP = 2
 HARD_DROP = 3
 
-def convert_times(h: options.HandlingScheme()):
+def convert_times(h):
     h.ARR /= 60
     h.DAS /= 60
     return 0

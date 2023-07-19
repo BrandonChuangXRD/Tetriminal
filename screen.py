@@ -111,6 +111,7 @@ class game_display():
         curses.cbreak()
         curses.curs_set(0)
         self.disp.keypad(True)
+        self.disp.nodelay(1)
         curses.start_color()
         if curses.has_colors() == False:
             print("TERMINAL DOES NOT HAVE COLORS: not implemented.")
@@ -208,6 +209,14 @@ class game_display():
             curr.addstr(*QUEUESHAPE[q[i]])
             curr.refresh()
         return 0
+    
+    def get_keypresses(self):
+        l = []
+        curr = self.disp.getch()
+        while curr != curses.ERR:
+            l.append(curr)
+            curr = self.disp.getch()
+        return l
 
 
 def get_dimensions(self):
@@ -227,14 +236,6 @@ def options_kill(disp):
     curses.echo()
     curses.endwin()
     return 0
-
-def get_keypresses():
-    l = []
-    curr = curses.getch()
-    while curr != curses.ERR:
-        l.append(curr)
-        curr = curses.getch()
-    return l
 
 # def game_display(length=10, height=20, grid = None, leftinfo = [], queue = []):
 
