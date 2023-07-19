@@ -75,6 +75,7 @@ class game_display():
         global COLOR_CODES
         curses.start_color()
         curses.use_default_colors()
+        #! this is redundant but I can change it later.
         curses.init_pair(2, curses.COLOR_RED, curses.COLOR_WHITE)
         curses.init_pair(3, curses.COLOR_GREEN, curses.COLOR_WHITE)
         curses.init_pair(4, curses.COLOR_MAGENTA, curses.COLOR_WHITE)
@@ -99,7 +100,7 @@ class game_display():
                            "j": (MINOCHAR, curses.color_pair(6)),
                            "i": (MINOCHAR, curses.color_pair(7)),
                            "o": (MINOCHAR, curses.color_pair(8)),
-                           "e": ("□", curses.color_pair(9)),
+                           "e": ("+", curses.color_pair(9)), #backups □ 
                            "g": (MINOCHAR, curses.color_pair(10)),
                            "x": ("X", curses.color_pair(11))} # TODO this one should probably be "><" instead of two x's next to each other.
         return True
@@ -227,6 +228,13 @@ def options_kill(disp):
     curses.endwin()
     return 0
 
+def get_keypresses():
+    l = []
+    curr = curses.getch()
+    while curr != curses.ERR:
+        l.append(curr)
+        curr = curses.getch()
+    return l
 
 # def game_display(length=10, height=20, grid = None, leftinfo = [], queue = []):
 

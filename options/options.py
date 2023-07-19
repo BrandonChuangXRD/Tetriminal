@@ -3,7 +3,7 @@ import json
 
 #convert to JSON objects.
 class HandlingScheme():
-    def __init__(self, ARR = 2, DAS = 10, DCD = 0, SDF = 6, DAS_DC = False, HDL = True):
+    def __init__(self, ARR = 2, DAS = 10, DCD = False, SDF = 6, HDL = True):
         self.ARR = ARR
         self.DAS = DAS
         self.DCD = DCD #Cancel DAS upon changing direction

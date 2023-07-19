@@ -4,8 +4,8 @@ sys.path.append("..")
 import board
 import screen
 import time
-import order
-
+import order 
+import movement
 
 def start():
     randomize_interval = 1 #second
