@@ -10,12 +10,11 @@ import curses
 MINOCHAR =  "█"
 BACKUPS = "▊ █" 
 
-
-
 #use the splat operator for this: https://www.geeksforgeeks.org/python-passing-dictionary-as-arguments-to-function/#
 # ch: _ChType, attr: int = ...
 
 COLOR_CODES = {}
+QUEUESHAPE = {}
 
 #pieces spawn at a minimum height of 21 (two above the end)
 #2 extra rows are displayed above "height"
@@ -54,6 +53,20 @@ class game_display():
     def terminal_change(self):
         return True
     
+    #this assumes color_init has already been run
+    def minoshape_init(self):
+        global QUEUESHAPE 
+        QUEUESHAPE = {
+            "t": (("  ██    ██████  "), curses.color_pair(54)),
+            "j": (("██      ██████  "), curses.color_pair(56)),
+            "l": (("    ██  ██████  "), curses.color_pair(55)),
+            "s": (("  ████  ████    "), curses.color_pair(53)),
+            "z": (("████      ████  "), curses.color_pair(52)),
+            "o": (("████    ████    "), curses.color_pair(58)),
+            "i": (("        ████████"), curses.color_pair(57)),
+            "e": (("                "), curses.color_pair(10)) #empty
+        }
+        return 0
     # TODO
     def color_init(self):
         #need three routes for no color, color, fancy custom colors
@@ -69,7 +82,7 @@ class game_display():
         curses.init_pair(6, curses.COLOR_BLUE, curses.COLOR_WHITE)
         curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_WHITE)
         curses.init_pair(8, curses.COLOR_YELLOW, curses.COLOR_WHITE)
-        curses.init_pair(9, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(9, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(10, curses.COLOR_WHITE, curses.COLOR_BLACK)
         curses.init_pair(11, curses.COLOR_RED, curses.COLOR_BLACK)
         curses.init_pair(52, curses.COLOR_RED, curses.COLOR_BLACK)
@@ -86,10 +99,9 @@ class game_display():
                            "j": (MINOCHAR, curses.color_pair(6)),
                            "i": (MINOCHAR, curses.color_pair(7)),
                            "o": (MINOCHAR, curses.color_pair(8)),
-                           "e": (MINOCHAR, curses.color_pair(9)),
+                           "e": ("□", curses.color_pair(9)),
                            "g": (MINOCHAR, curses.color_pair(10)),
                            "x": ("X", curses.color_pair(11))} # TODO this one should probably be "><" instead of two x's next to each other.
-
         return True
 
     def start(self, grid = [], leftinfo = [], queue = []):
@@ -111,6 +123,7 @@ class game_display():
             print("Terminal size is too small")
             return 1
         self.color_init()
+        self.minoshape_init()
         self.update_info()
         self.update_board(grid)
         self.update_hold()
@@ -130,28 +143,29 @@ class game_display():
         text = "HOLD"
         #"HOLD" text at the top
         textpos_y = (self.display_height//2)-(self.grid_height//2)+4
-        textpos_x = (self.display_length//2)-self.grid_length-6 #-1 for the border, -4 for the text length
+        textpos_x = (self.display_length//2)-self.grid_length-6 #-1 for the border, -5 for the text length
         textwin = curses.newwin(2, 5, textpos_y, textpos_x)
         textwin.addstr("HOLD")
         textwin.refresh()
         #next piece, make it just T for now
-        if piece is not None:
-            piecewin = curses.newwin(3, 8, textpos_y+2, textpos_x-4)
-            if piece == "t":
-                piecewin.addstr(("    ██    ██████"), curses.color_pair(54))
-            elif piece == "j":
-                piecewin.addstr(("  ██      ██████"), curses.color_pair(56))
-            elif piece == "l":
-                piecewin.addstr(("      ██  ██████"), curses.color_pair(55))
-            elif piece == "s":
-                piecewin.addstr(("    ████  ████  "), curses.color_pair(53))
-            elif piece == "z":
-                piecewin.addstr(("  ████      ████"), curses.color_pair(52))
-            elif piece == "o":
-                piecewin.addstr(("  ████    ████  "), curses.color_pair(58))
-            elif piece == "i":
-                piecewin.addstr(("        ████████"), curses.color_pair(57))
-            piecewin.refresh()
+        piecewin = curses.newwin(3, 8, textpos_y+2, textpos_x-4)
+        if piece == "t":
+            piecewin.addstr(("    ██    ██████"), curses.color_pair(54))
+        elif piece == "j":
+            piecewin.addstr(("  ██      ██████"), curses.color_pair(56))
+        elif piece == "l":
+            piecewin.addstr(("      ██  ██████"), curses.color_pair(55))
+        elif piece == "s":
+            piecewin.addstr(("    ████  ████  "), curses.color_pair(53))
+        elif piece == "z":
+            piecewin.addstr(("  ████      ████"), curses.color_pair(52))
+        elif piece == "o":
+            piecewin.addstr(("  ████    ████  "), curses.color_pair(58))
+        elif piece == "i":
+            piecewin.addstr(("        ████████"), curses.color_pair(57))
+        else:
+            piecewin.addstr(("                "), curses.color_pair(10))
+        piecewin.refresh()
         return 0
     
     #! You might want to just make this a window.
@@ -180,7 +194,18 @@ class game_display():
     
     # TODO
     #entire thing needs to be updated anyways
-    def update_queue(self):
+    def update_queue(self, q = []):
+        text = "QUEUE"
+        textpos_y = (self.display_height//2)-(self.grid_height//2)+4
+        textpos_x = (self.display_length//2)+self.grid_length+2 #-1 for the border, -4 for the text length
+        textwin = curses.newwin(2, 6, textpos_y, textpos_x)
+        textwin.addstr("QUEUE")
+        textwin.refresh()
+        #piecewins = []
+        for i in range(len(q)):
+            curr = curses.newwin(3, 8, textpos_y+2+(3*i), textpos_x)
+            curr.addstr(*QUEUESHAPE[q[i]])
+            curr.refresh()
         return 0
 
 
