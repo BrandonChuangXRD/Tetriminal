@@ -6,6 +6,7 @@ import screen
 import time
 import order 
 import movement
+from pynput import keyboard
 
 def start():
     randomize_interval = 1 #second
@@ -22,10 +23,11 @@ def start():
     last_update = time.time()-1
     while True:
         k = disp.get_keypresses()
-        if ord("q") in k:
+        #print(k)
+        if keyboard.KeyCode(char = "q") in k:
             disp.kill()
             return 0
-        if time.time() > last_update+1:
+        if time.time() > last_update+1 or keyboard.Key.space in k:
             last_update +=1
             b.random_grid() 
             disp.update_board(b.grid)

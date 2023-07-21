@@ -1,4 +1,5 @@
 import curses
+from pynput import keyboard
 
 #the layout here is just text on the left side of the board and a queue on the right side, maximum 6 piece in visible queue
 #for temp just do the board for now
@@ -9,6 +10,22 @@ import curses
 #! it would be very nice to have a double wide version, blocks being 2x3 to make it more square
 MINOCHAR =  "█"
 BACKUPS = "▊ █" 
+
+pressed_keys = []
+
+# this is properly done, problem isnt here
+def on_press(key):
+    global pressed_keys
+    if key not in pressed_keys:
+        pressed_keys.append(key)
+    return 0
+
+# this is properly done, problem isn't here
+def on_release(key):
+    global pressed_keys
+    if key in pressed_keys:
+        pressed_keys.remove(key)
+    return 0
 
 #use the splat operator for this: https://www.geeksforgeeks.org/python-passing-dictionary-as-arguments-to-function/#
 # ch: _ChType, attr: int = ...
@@ -33,12 +50,18 @@ class game_display():
         self.display_length = -1
         self.display_height = -1
 
+        self.keyboard_listener = keyboard.Listener(
+            on_press=on_press,
+            on_release=on_release)
+        self.keyboard_listener.start()
+
     def kill(self):
         self.disp.clear()
         curses.nocbreak()
         self.disp.keypad(False)
         curses.echo()
         curses.endwin()
+        self.keyboard_listener.stop()
         return 0    
 
     #! Do this later.
@@ -106,7 +129,7 @@ class game_display():
         return True
 
     def start(self, grid = [], leftinfo = [], queue = []):
-        self.disp = curses.initscr()
+        self.disp = curses.initscr() #! i think this clashes with pynput. I don't know what to do about it.
         curses.noecho()
         curses.cbreak()
         curses.curs_set(0)
@@ -211,12 +234,8 @@ class game_display():
         return 0
     
     def get_keypresses(self):
-        l = []
-        curr = self.disp.getch()
-        while curr != curses.ERR:
-            l.append(curr)
-            curr = self.disp.getch()
-        return l
+        global pressed_keys
+        return pressed_keys.copy()
 
 
 def get_dimensions(self):
