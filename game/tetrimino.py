@@ -4,10 +4,15 @@ from functools import cache
 
 TETRIMINOS = ["i", "o", "t", "j", "l", "s", "z"]
 DEBUG_MINO = "g"
+
+#this is what it would look like if i stuck with the numbers,
+#however just using numbers is easier to make it circular
+#ROTATIONS = ["n", "e", "s", "w"]
+#              0    1    2    3
 class Piece():
-    def __init__(self, shape = "e", orientation = "n"): #empty shape
+    def __init__(self, shape: str = "e", orientation: int = 0): #empty shape, facing north
         self.shape = shape
-        self.orientation = orientation #north, south, east, west
+        self.orientation = orientation #north, south, east, west ("n", "s", "e", "w")
         
     def set_shape(self, shape: str):
         self.shape = shape
@@ -20,8 +25,8 @@ class Piece():
     #o: 22.5
     #j: 22
     @cache
-    def get_spawn(self, p, board_x = 10, board_y = 20):
-        match p.shape:
+    def get_spawn(self, board_x = 10, board_y = 20):
+        match self.shape:
             case "i":
                 return (board_y+.5, (board_x//2)-.5)
             case "o":
@@ -39,25 +44,86 @@ class Piece():
             case "g":
                 return (board_y+1, (board_x//2)-1)
             case _:
-                return NotImplementedError(f"Piece {p.shape} undefined in tetrimino")
+                return ValueError(f"Piece {self.shape} undefined in tetrimino")
+    
+    #clockwise
+    def spin_cw(self):
+        self.orientation = (self.orientation+1)%4
+        return 0
+    
+    #counter clockwise
+    def spin_ccw(self):
+        self.orientation = (self.orientation-1)%4
+        return 0
 
     #get the position of the 4 blocks comprising the piece, given the shape and the coordinates.
-    @cache
-    def get_position(self, p, y, x):
-        match p.shape:
-            case "i":
-                return NotImplementedError("get spawn x not implemented")
-            case "o":
-                return NotImplementedError("get spawn x not implemented")
+    def get_position(self, y: int, x: int):
+        match self.shape:
             case "t":
-                return NotImplementedError("get spawn x not implemented")
+                match self.orientation:
+                    case 0:
+                        return ((y, x), (y+1, x), (y, x+1), (y, x-1))
+                    case 1:
+                        return ((y, x), (y+1, x), (y-1, x), (y, x+1))
+                    case 2:
+                        return ((y, x), (y, x-1), (y, x+1), (y-1, x))
+                    case 3:
+                        return ((y, x), (y, x-1), (y+1, x), (y-1, x))
+            case "o":
+                return ((int(y+.5),int(x+.5)), (int(y+.5), int(x-.5)), (int(y-.5), int(x-.5)), (int(y-.5), int(x+.5)))
+            case "i":
+                match self.orienetation:
+                    case 0:
+                        y = int(y+.5)
+                        return ((y, int(x-1.5)), (y, int(x-.5)), (y, int(x+.5)), (y, int(x+1.5)))
+                    case 1:
+                        x = int(x+.5)
+                        return ((int(y+1.5), x), (int(y+.5), x), (int(y-.5), x), (int(y-1.5), x))
+                    case 2:
+                        y = int(y-.5)
+                        return ((y, int(x-1.5)), (y, int(x-.5)), (y, int(x+.5)), (y, int(x+1.5)))
+                    case 3:
+                        x = int(x-.5)
+                        return ((int(y+1.5), x), (int(y+.5), x), (int(y-.5), x), (int(y-1.5), x))
             case "j":
-                return NotImplementedError("get spawn x not implemented")
+                match self.orienetation:
+                    case 0:
+                        return 
+                    case 1:
+                        return 
+                    case 2:
+                        return 
+                    case 3:
+                        return 
             case "l":
-                return NotImplementedError("get spawn x not implemented")
+                match self.orienetation:
+                    case 0:
+                        return 
+                    case 1:
+                        return 
+                    case 2:
+                        return 
+                    case 3:
+                        return 
             case "s":
-                return NotImplementedError("get spawn x not implemented")
+                match self.orienetation:
+                    case 0:
+                        return 
+                    case 1:
+                        return 
+                    case 2:
+                        return 
+                    case 3:
+                        return 
             case "z":
-                return NotImplementedError("get spawn x not implemented")
+                match self.orienetation:
+                    case 0:
+                        return 
+                    case 1:
+                        return 
+                    case 2:
+                        return 
+                    case 3:
+                        return 
             case "g":
-                return [(y, x)]
+                return ((y, x))
