@@ -4,6 +4,7 @@ import sys
 import time
 sys.path.append("..")
 import options
+import pynput
 
 LEFT = 0
 RIGHT = 1

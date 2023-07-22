@@ -29,7 +29,11 @@ this can be run with the command `python3 main.py` as of now. the `-d` flag runs
 
 ## Credits and Method Reasonings
 - Thank you to the developers behind the [pynput](https://github.com/moses-palmer/pynput) on github for the pynput library. The curses library was insufficent for this project due to the lack of "release events" for keys.
-- The curses library was used because it interested me; it was used in a class assignment for class I took, but for a different quarter.
+- The curses library was used because it interested me; it was used in a class assignment for class I took, but during a different quarter.
+- I tried to modularize as best as possible, which explains the excess files.
 - The SRS (Super Rotation System) implementation is based on its [wikipedia page](https://tetris.wiki/Super_Rotation_System).
 - The NRS (Nintendo Rotation System) implementation is based on its [fandom page](https://tetris.fandom.com/wiki/Nintendo_Rotation_System).
 - The layout, information, and gamemodes are based off of [TETR.IO](https://tetr.io/). Fun game 10/10.
+
+## Notes for development
+- The "X" warning that you are getting close to death appears when any block occupies any part of the top 3 rows.

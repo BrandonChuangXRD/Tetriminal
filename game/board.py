@@ -11,6 +11,7 @@ class Board():
         self.hidden = hidden
         self.spawn = height + 1
         self.grid = None
+        self.active_piece = None
 
     def change_size(self, length=10, height=20):
         self.length = length

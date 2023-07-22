@@ -1,11 +1,11 @@
 import sys
 import time
 sys.path.append("..")
-import board
+import game.board as board
 import screen
 import time
-import order 
-import movement
+import game.order as order 
+import game.movement as movement
 from pynput import keyboard
 
 def start():
