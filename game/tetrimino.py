@@ -55,6 +55,10 @@ class Piece():
     def spin_ccw(self):
         self.orientation = (self.orientation-1)%4
         return 0
+    
+    #one eighty spin
+    def spin_oe(self):
+        self.orientation = (self.orientation-2)%4
 
     #get the position of the 4 blocks comprising the piece, given the shape and the coordinates.
     def get_position(self, y: int, x: int):
@@ -88,42 +92,42 @@ class Piece():
             case "j":
                 match self.orienetation:
                     case 0:
-                        return 
+                        return ((y, x), (y, x-1), (y+1, x-1), (y, x+1))
                     case 1:
-                        return 
+                        return ((y, x), (y+1, x), (y+1, x+1), (y-1, x))
                     case 2:
-                        return 
+                        return ((y, x), (y, x-1), (y, x+1), (y-1, x+1))
                     case 3:
-                        return 
+                        return ((y, x), (y+1, x), (y-1, x), (y-1, x-1))
             case "l":
                 match self.orienetation:
                     case 0:
-                        return 
+                        return ((y, x), (y, x-1), (y, x+1), (y+1, x+1))
                     case 1:
-                        return 
+                        return ((y, x), (y+1, x), (y-1, x), (y-1, x+1))
                     case 2:
-                        return 
+                        return ((y, x), (y, x+1), (y, x-1), (y-1, x-1))
                     case 3:
-                        return 
+                        return ((y, x), (y+1, x), (y+1, x-1), (y-1, x))
             case "s":
                 match self.orienetation:
                     case 0:
-                        return 
+                        return ((y, x), (y, x-1), (y+1, x), (y+1, x+1))
                     case 1:
-                        return 
+                        return ((y, x), (y+1, x), (y, x+1), (y-1, x+1))
                     case 2:
-                        return 
+                        return ((y, x), (y-1, x), (y-1, x-1), (y, x+1))
                     case 3:
-                        return 
+                        return ((y, x), (y-1, x), (y, x-1), (y+1, x-1))
             case "z":
                 match self.orienetation:
                     case 0:
-                        return 
+                        return ((y, x), (y+1, x), (y+1, x-1), (y, x+1))
                     case 1:
-                        return 
+                        return ((y, x), (y, x+1), (y+1, x+1), (y-1, x))
                     case 2:
-                        return 
+                        return ((y, x), (y, x-1), (y-1, x), (y-1, x+1))
                     case 3:
-                        return 
+                        return ((y, x), (y, x-1), (y-1, x-1), (y+1, x))
             case "g":
                 return ((y, x))

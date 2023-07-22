@@ -1,6 +1,6 @@
 import random
 
-#'g' stands for ghost piece and 'e' stands for empty
+#'g': ghost piece; 'e': empty; 'x': spawnpoint warning
 states = ["s", "z", "l", "j", "o", "t", "i", "e", "g", "x"]
 
 
@@ -29,3 +29,9 @@ class Board():
             self.grid.append([])
             for _ in range(self.length):
                 self.grid[-1].append(random.choice(states))
+
+def check_collision(grid, blocks = []):
+    for y, x in blocks:
+        if grid[y][x] != "e":
+            return False
+    return True
