@@ -1,12 +1,11 @@
 import sys
 import time
+from pynput import keyboard
 sys.path.append("..")
 import game.board as board
 import screen
 import time
 import game.order as order 
-import game.movement as movement
-from pynput import keyboard
 
 def start():
     randomize_interval = 1 #second

@@ -14,7 +14,7 @@ class HandlingScheme():
         jsobj = {"ARR": self.ARR, "DAS": self.DAS, "DCD": self.DCD, "SDF": self.SDF, "HDL": self.HDL}
         return json.dumps(jsobj, indent = 4)
     
-    def deserialize(self, jsfile):
+    def deserialize(self, jsfile = "options/handling.json"):
         jsdict = None
         with open(jsfile, "r") as infile:
             jsdict = infile.read()
@@ -54,7 +54,7 @@ class ControlScheme():
                 "hold": self.hold}
         return json.dumps(jsobj, indent = 4)
     
-    def deserialize(self, jsfile):
+    def deserialize(self, jsfile = "controls.json"):
         jsdict = None
         with open(jsfile, "r") as infile:
             jsdict = infile.read()

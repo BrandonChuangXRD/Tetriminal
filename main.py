@@ -1,9 +1,9 @@
 import os
-import options.options as options
+import options.opt as opt
 import argparse
 import screen
 import gamemodes.zen as zen
-import gamemodes.debug as debug
+import gamemodes.debugscreen as debugscreen
 import curses
 import sys
 
@@ -33,13 +33,13 @@ def main():
     # sys.excepthook = handle_exception
     #create control/handling scheme if it doesn't exist, using default values
     if not os.path.isfile(HANDLING_SOURCE):
-        default = options.HandlingScheme()
+        default = opt.HandlingScheme()
         default = default.serialize()
         with open(HANDLING_SOURCE, "w") as outfile:
             outfile.write(default)
 
     if not os.path.isfile(CONTROLS_SOURCE):
-        default = options.ControlScheme()
+        default = opt.ControlScheme()
         default = default.serialize()
         with open(CONTROLS_SOURCE, "w") as outfile:
             outfile.write(default)
@@ -57,13 +57,13 @@ def main():
         screen.options_display()
         return 0
     
-    ctrl = options.ControlScheme()
+    ctrl = opt.ControlScheme()
     ctrl = ctrl.deserialize(CONTROLS_SOURCE)
 
-    handle = options.HandlingScheme()
+    handle = opt.HandlingScheme()
     handle = handle.deserialize(HANDLING_SOURCE)
     if args.debug:
-        debug.start()
+        debugscreen.start()
         return 0
     if args.zen:
         zen.start()

@@ -13,9 +13,18 @@ class Piece():
     def __init__(self, shape: str = "e", orientation: int = 0): #empty shape, facing north
         self.shape = shape
         self.orientation = orientation #north, south, east, west ("n", "s", "e", "w")
-        
+        #! just set the coordinates to the spawn point for now.
+        self.y = None
+        self.x = None
+
     def set_shape(self, shape: str):
         self.shape = shape
+
+    #collision checking is the movement and rotation library's problem
+    def set_position(self, y: int, x: int):
+        self.y = y
+        self.x = x
+        return 0
 
     #determines the coordinates for the spawn, but on the floor.
     #this is because different games have different spawn points.
@@ -59,9 +68,12 @@ class Piece():
     #one eighty spin
     def spin_oe(self):
         self.orientation = (self.orientation-2)%4
+        return 0
 
     #get the position of the 4 blocks comprising the piece, given the shape and the coordinates.
-    def get_position(self, y: int, x: int):
+    def get_blocks(self) -> list:
+        y = self.y
+        x = self.x
         match self.shape:
             case "t":
                 match self.orientation:
@@ -76,7 +88,7 @@ class Piece():
             case "o":
                 return ((int(y+.5),int(x+.5)), (int(y+.5), int(x-.5)), (int(y-.5), int(x-.5)), (int(y-.5), int(x+.5)))
             case "i":
-                match self.orienetation:
+                match self.orientation:
                     case 0:
                         y = int(y+.5)
                         return ((y, int(x-1.5)), (y, int(x-.5)), (y, int(x+.5)), (y, int(x+1.5)))
@@ -90,7 +102,7 @@ class Piece():
                         x = int(x-.5)
                         return ((int(y+1.5), x), (int(y+.5), x), (int(y-.5), x), (int(y-1.5), x))
             case "j":
-                match self.orienetation:
+                match self.orientation:
                     case 0:
                         return ((y, x), (y, x-1), (y+1, x-1), (y, x+1))
                     case 1:
@@ -100,7 +112,7 @@ class Piece():
                     case 3:
                         return ((y, x), (y+1, x), (y-1, x), (y-1, x-1))
             case "l":
-                match self.orienetation:
+                match self.orientation:
                     case 0:
                         return ((y, x), (y, x-1), (y, x+1), (y+1, x+1))
                     case 1:
@@ -110,7 +122,7 @@ class Piece():
                     case 3:
                         return ((y, x), (y+1, x), (y+1, x-1), (y-1, x))
             case "s":
-                match self.orienetation:
+                match self.orientation:
                     case 0:
                         return ((y, x), (y, x-1), (y+1, x), (y+1, x+1))
                     case 1:
@@ -120,7 +132,7 @@ class Piece():
                     case 3:
                         return ((y, x), (y-1, x), (y, x-1), (y+1, x-1))
             case "z":
-                match self.orienetation:
+                match self.orientation:
                     case 0:
                         return ((y, x), (y+1, x), (y+1, x-1), (y, x+1))
                     case 1:

@@ -7,9 +7,13 @@ from pynput import keyboard
 #TODO terminal must be big enough to display at least the grid
 #TODO minimum for now: length 30 height 25
 #TODO a grid border could be cool.
-#! it would be very nice to have a double wide version, blocks being 2x3 to make it more square
 MINOCHAR =  "█"
-BACKUPS = "▊ █" 
+#BACKUPS = "▊ █" 
+
+#! spawnpoint: >< 
+#! grid border: ╔ ╗ ╝ ╚ ║ ═
+#! hold/queue border: └ ┘ ┌ ┐   │ ─    ┴ ┬ ├ ┤ ┼
+#! empty square, pieces above grid: []
 
 pressed_keys = []
 
@@ -39,6 +43,8 @@ class game_display():
     #use a pads for the grid and queue
     def __init__(self, length = 10, height = 20+4):
         self.disp = None #curses display class
+
+        #TODO USE THESE!!!!
         self.grid_pad = None #curses pad class
         self.hold_pad = None
         self.queue_pad = None
@@ -63,7 +69,7 @@ class game_display():
         curses.endwin()
         self.keyboard_listener.stop()
         return 0    
-
+    
     #! Do this later.
     #blanks out the screen, centers text saying the terminal is too small
     def pause_display():
@@ -208,13 +214,13 @@ class game_display():
         for y in range(self.grid_height-1, -1, -1):
             for x in range(self.grid_length):
                 #grid will be in reversed order
-                g_y = self.grid_height-y
+                g_y = self.grid_height-y-1
                 self.grid_pad.addch(y, x*2, *COLOR_CODES[grid[g_y][x]])
                 self.grid_pad.addch(y, x*2+1, *COLOR_CODES[grid[g_y][x]])
         #refresh at the correct place
         self.grid_pad.refresh(0, 0, #start of pad
                               center_height-(self.grid_height//2), center_length-self.grid_length, #top left corner of window
-                              center_height+((self.grid_height+1)//2), center_length+self.grid_length+1) #bottom right corner of window
+                              center_height+((self.grid_height+2)//2), center_length+self.grid_length+1) #bottom right corner of window
         return 0
     
     # TODO

@@ -1,5 +1,4 @@
 #! The goal of the roatation systems is that each kick table can be applied to any piece, even fake ones. Just pick the correct ones.
-import sys
 
 #returns true if rotate was successful, false otherwise.
 class RotateTemplate():
