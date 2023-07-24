@@ -175,10 +175,11 @@ class game_display():
         #"HOLD" text at the top
         textpos_y = (self.display_height//2)-(self.grid_height//2)+4
         textpos_x = (self.display_length//2)-self.grid_length-6 #-1 for the border, -5 for the text length
-        textwin = curses.newwin(2, 5, textpos_y, textpos_x)
-        textwin.addstr("HOLD")
-        textwin.refresh()
-        #next piece, make it just T for now
+        if self.hold_pad is None:
+            self.hold_pad = curses.newwin(2, 5, textpos_y, textpos_x)
+            self.hold_pad.addstr("HOLD")
+            self.hold_pad.refresh()
+        #piece
         piecewin = curses.newwin(3, 8, textpos_y+2, textpos_x-4)
         if piece == "t":
             piecewin.addstr(("    ██    ██████"), curses.color_pair(54))
@@ -208,7 +209,8 @@ class game_display():
         center_length = self.display_length//2
         #adding one is the only way I can get it not to crash. I don't know why,
         #but python doc shows this
-        self.grid_pad = curses.newpad(self.display_height+1, self.display_length+1)
+        if self.grid_pad is None:
+            self.grid_pad = curses.newpad(self.display_height+1, self.display_length+1)
         # TODO Fill in the pad, one pixel at a time (will need to be replaced to make the board larger)
         #make sure to account for the hidden rows.
         for y in range(self.grid_height-1, -1, -1):
@@ -229,9 +231,10 @@ class game_display():
         text = "QUEUE"
         textpos_y = (self.display_height//2)-(self.grid_height//2)+4
         textpos_x = (self.display_length//2)+self.grid_length+2 #-1 for the border, -4 for the text length
-        textwin = curses.newwin(2, 6, textpos_y, textpos_x)
-        textwin.addstr("QUEUE")
-        textwin.refresh()
+        if self.queue_pad == None:
+            self.queue_pad = curses.newwin(2, 6, textpos_y, textpos_x)
+            self.queue_pad.addstr("QUEUE")
+            self.queue_pad.refresh()
         #piecewins = []
         for i in range(len(q)):
             curr = curses.newwin(3, 8, textpos_y+2+(3*i), textpos_x)
