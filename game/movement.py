@@ -88,6 +88,7 @@ class MoveStates():
         return True
     
     def _down_inf(self, grid, piece):
+        
         pass
 
     #returns the new y, x coordinates 
@@ -107,6 +108,7 @@ class MoveStates():
             else:
                 if self.lock_time <= self.timer:
                     self._lock_piece(grid, piece)
+                    self.lock_time = float("inf")
                     return True
 
         #key pressed -> key held -> key released
@@ -119,33 +121,56 @@ class MoveStates():
         elif HARD_DROP not in keys and HARD_DROP in self.key_time.keys():
             del self.key_time[HARD_DROP]
 
-
+        #TODO when left and right are pressed at the same time,
+        #TODO movement is not the same.
         #left
         if LEFT in keys and LEFT not in self.key_time.keys():
             self._left(grid, piece)
             self.key_time[LEFT] = self.timer
+            self.repeat_times[LEFT] = self.timer+self.handle.DAS
         elif LEFT in keys and LEFT in self.key_time.keys():
-            pass            
+            if self.handle.ARR == 0:
+                self._left_inf(grid, piece)
+            elif self.repeat_times[LEFT] <= self.timer:
+                self._left(grid, piece)
+                self.repeat_times[LEFT] += self.handle.ARR
+                while self.repeat_times[LEFT] <= self.timer:
+                    self._left(grid, piece)
+                    self.repeat_times[LEFT] += self.handle.ARR
         elif LEFT not in keys and LEFT in self.key_time.keys():
             del self.key_time[LEFT]
+            del self.repeat_times[LEFT]
 
 
         #right
         if RIGHT in keys and RIGHT not in self.key_time.keys():
             self._right(grid, piece)
             self.key_time[RIGHT] = self.timer
+            self.repeat_times[RIGHT] = self.timer+self.handle.DAS
         elif RIGHT in keys and RIGHT in self.key_time.keys():
-            pass
+            if self.handle.ARR == 0:
+                self._right_inf(grid, piece)
+            elif self.repeat_times[RIGHT] <= self.timer:
+                self._right(grid, piece)
+                self.repeat_times[RIGHT] += self.handle.ARR
+                while self.repeat_times[RIGHT] <= self.timer:
+                    self._right(grid, piece)
+                    self.repeat_times[RIGHT] += self.handle.ARR
         elif RIGHT not in keys and RIGHT in self.key_time.keys():
             del self.key_time[RIGHT]
+            del self.repeat_times[RIGHT]
 
         #soft drop
         if SOFT_DROP in keys and SOFT_DROP not in self.key_time.keys():
-            self._down(grid, piece)
+            self.gravity /= (self.handle.SDF**2)
             self.key_time[SOFT_DROP] = self.timer
-        elif SOFT_DROP in keys and SOFT_DROP in self.key_time.keys():
-            pass
+            temp = self.repeat_times["gravity"]-self.timer
+            self.repeat_times["gravity"] -= temp-(temp/self.handle.SDF**2)
         elif SOFT_DROP not in keys and SOFT_DROP in self.key_time.keys():
+            self.gravity *= (self.handle.SDF**2)
+            temp = self.repeat_times["gravity"]-self.timer
+            self.repeat_times["gravity"] += (temp*self.handle.SDF**2)-temp
             del self.key_time[SOFT_DROP]
+    
 
         
