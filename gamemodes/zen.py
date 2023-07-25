@@ -46,7 +46,7 @@ def start():
             disp.kill()
             return 0
         
-        if curr_piece == None:
+        if curr_piece == None or curr_piece.shape== "e":
             curr_piece = q.pop(0)
             curr_piece = tetrimino.Piece(curr_piece)
             curr_piece.set_position(*curr_piece.get_spawn())
@@ -55,10 +55,12 @@ def start():
         movesys.update_piece(b.grid, curr_piece,  k)
 
         #board add piece
-        b.add_piece(curr_piece)
+        if curr_piece != None and curr_piece.shape != "e":
+            b.add_piece(curr_piece)
         disp.update_board(b.grid)
         disp.update_board(b.grid)
         disp.update_hold(hold)
         disp.update_queue(q)
-        b.remove_piece(curr_piece)
+        if curr_piece != None and curr_piece.shape != "e":
+            b.remove_piece(curr_piece)
         #board board remove piece
