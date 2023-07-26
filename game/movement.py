@@ -48,7 +48,6 @@ class MoveStates():
     def _lock_piece(self, grid: list, piece: tetrimino.Piece):
         for y, x in piece.get_blocks():
             grid[y][x] = piece.shape
-        print("locked!")
         #to indicate the piece has been placed
         piece.shape = "e"
         return 0
@@ -64,7 +63,13 @@ class MoveStates():
     
 
     def _left_inf(self, grid, piece):
-        pass
+        movecheck = False
+        piece.x -= 1
+        while not collision.check_collision(grid, piece.get_blocks()):
+            piece.x -= 1
+            movecheck = True
+        piece.x += 1
+        return movecheck
 
     #TODO
     def _right(self, grid, piece):
@@ -76,7 +81,13 @@ class MoveStates():
     
 
     def _right_inf(self, grid, piece):
-        pass
+        movecheck = False
+        piece.x += 1
+        while not collision.check_collision(grid, piece.get_blocks()):
+            piece.x += 1
+            movecheck = True
+        piece.x -= 1
+        return movecheck
     
 
     #TODO do this first for gravity, need to test spawn points
@@ -88,8 +99,13 @@ class MoveStates():
         return True
     
     def _down_inf(self, grid, piece):
-        
-        pass
+        movecheck = False
+        piece.y -= 1
+        while not collision.check_collision(grid, piece.get_blocks()):
+            piece.y -= 1
+            movecheck = True
+        piece.y += 1
+        return movecheck
 
     #returns the new y, x coordinates 
     def update_piece(self, grid: list, piece: tetrimino.Piece, keys = []):
@@ -173,4 +189,5 @@ class MoveStates():
             del self.key_time[SOFT_DROP]
     
 
-        
+    def game_over(self, grid:list, piece: tetrimino.Piece):
+        return collision.check_collision(grid, piece.get_blocks())

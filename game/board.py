@@ -39,6 +39,22 @@ class Board():
             self.grid[y][x] = "e"
         return 0
 
+    #TODO clear type not implemented yet
     def clear_lines(self):
-
+        clearamount = ["single", "double", "triple", "quad"]
+        cleartype = ["normal", "tspin", "quad"]
+        for y in range((self.height + self.hidden)-1, -1, -1):
+            break_cond = False
+            for x in range(self.length):
+                if self.grid[y][x] == "e":
+                    break_cond = True
+                    continue
+            if break_cond:
+                continue
+            #clear the line
+            for cy in range(y, (self.height+self.hidden)-1):
+                for x in range(self.length):
+                    self.grid[cy][x] = self.grid[cy+1][x]
+            for x in range(self.length):
+                self.grid[self.height+self.hidden-1][x] = "e"
         return 0
