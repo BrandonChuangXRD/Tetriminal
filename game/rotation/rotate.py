@@ -10,16 +10,17 @@ CCW = keyboard.KeyCode(None, "z")
 CW = keyboard.KeyCode(None, "x")
 OE = keyboard.KeyCode(None, "a")
 
-_KICKS_ALL = ((0, 0),
-                   (0, 0),
-                   (0, 0),
-                   (0, 0)
-                   )
+
 
 #returns true if rotate was successful, false otherwise.
 #kick_dict[shape][initial_orienation][final_orientation]
 class Rotate():
     def __init__(self):
+        KICKS_ALL = [[(0, 0)],
+                   [(0, 0)],
+                   [(0, 0)],
+                   [(0, 0)]
+                   ]
         self.held_keys = []
         self.kick_dict = {}
         self.kick_dict["i"] = []
@@ -29,14 +30,16 @@ class Rotate():
         self.kick_dict["s"] = []
         self.kick_dict["l"] = []
         self.kick_dict["j"] = []
-        for _ in range(4):
-            self.kick_dict["i"].append(_KICKS_ALL)
-            self.kick_dict["o"].append(_KICKS_ALL)
-            self.kick_dict["t"].append(_KICKS_ALL)
-            self.kick_dict["z"].append(_KICKS_ALL)
-            self.kick_dict["s"].append(_KICKS_ALL)
-            self.kick_dict["l"].append(_KICKS_ALL)
-            self.kick_dict["j"].append(_KICKS_ALL)
+        for i in range(4):
+            self.kick_dict["i"].append(KICKS_ALL)
+            self.kick_dict["o"].append(KICKS_ALL)
+            self.kick_dict["t"].append(KICKS_ALL)
+            self.kick_dict["z"].append(KICKS_ALL)
+            self.kick_dict["s"].append(KICKS_ALL)
+            self.kick_dict["l"].append(KICKS_ALL)
+            self.kick_dict["j"].append(KICKS_ALL)
+
+    
 
     #TODO make a verify kick tables function, such that each piece, initial, final combination has at least one kick table
     def verify_kick_table(self):
