@@ -34,6 +34,4 @@ this can be run with the command `python3 main.py` as of now. the `-d` flag runs
 - The SRS (Super Rotation System) implementation is based on its [wikipedia page](https://tetris.wiki/Super_Rotation_System).
 - The NRS (Nintendo Rotation System) implementation is based on its [fandom page](https://tetris.fandom.com/wiki/Nintendo_Rotation_System).
 - The layout, information, and gamemodes are based off of [TETR.IO](https://tetr.io/). Fun game 10/10.
-
-## Notes for development
-- The "X" warning that you are getting close to death appears when any block occupies any part of the top 3 rows.
+- I've seperated the spawn point for pieces from the rotation system (unlike the wiki) since it should be modifiable by the user.
