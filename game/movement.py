@@ -133,6 +133,7 @@ class MoveStates():
             self.key_time[HARD_DROP] = self.timer
             self._down_inf(grid, piece)
             self._lock_piece(grid, piece)
+            self.lock_time = float("inf")
             return True
         elif HARD_DROP not in keys and HARD_DROP in self.key_time.keys():
             del self.key_time[HARD_DROP]
