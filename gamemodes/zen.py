@@ -7,6 +7,8 @@ import game.board as board
 import screen
 import game.order as order
 from game.rotation import nrs
+from game.rotation import srs
+from game.rotation import rotate
 import game.movement as movement
 from game import tetrimino
 
@@ -24,7 +26,7 @@ BOARD_WIDTH = 10
 BOARD_HEIGHT = 20
 
 def start():
-    rotate_sys = nrs.NRS()
+    rotate_sys = srs.SRS()
     b = board.Board()
     b.grid_create()
     disp = screen.game_display()
@@ -50,7 +52,7 @@ def start():
 
 
         #new pieces
-        if curr_piece == None or curr_piece.shape== "e":
+        if curr_piece == None or curr_piece.shape == "e":
             curr_piece = q.pop(0)
             curr_piece = tetrimino.Piece(curr_piece)
             curr_piece.set_position(*curr_piece.get_spawn())
@@ -67,6 +69,8 @@ def start():
             else:
                 hold = curr_piece
                 curr_piece = None
+            hold.set_position(*hold.get_spawn())
+            hold.orientation = 0
 
         #new pieces
         if curr_piece == None or curr_piece.shape== "e":

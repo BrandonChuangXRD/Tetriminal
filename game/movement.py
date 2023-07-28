@@ -27,7 +27,7 @@ class MoveStates():
         self.height_time = 0 #need to calculate how much time it can idle on the ground before placing
         
         self.gravity = 0.0
-        self.lock_delay = .5 #how long a piece remains on the floor till locking
+        self.lock_delay = 100 #how long a piece remains on the floor till locking
         self.lock_time = float("inf")
         #when both left and right are pressed at the same time, the piece moves right
         #frames need to be converted to seconds.

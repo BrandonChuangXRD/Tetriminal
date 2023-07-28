@@ -5,9 +5,9 @@ from game import tetrimino
 from game import collision
 from pynput import keyboard
 
-CCW = keyboard.KeyCode(None, "z")
-CW = keyboard.KeyCode(None, "x")
-OE = keyboard.KeyCode(None, "a")
+CCW = keyboard.KeyCode(char = "z")
+CW = keyboard.KeyCode(char = "x")
+OE = keyboard.KeyCode(char = "a")
 
 #returns true if rotate was successful, false otherwise.
 class NRS(rotate.Rotate):
@@ -25,12 +25,4 @@ class NRS(rotate.Rotate):
     #doesn't do anything
     def _one_eighty(self, grid: list, piece: tetrimino.Piece) -> bool: 
         return False
-    
-    def update_piece(self, grid, piece, keys = []):
-        if CCW in keys and CCW not in self.held_keys:
-            self._counter_clockwise(grid, piece)
-        if CW in keys and CW not in self.held_keys:
-            self._clockwise(grid, piece)
-        self.held_keys = keys.copy()
-        return 0
     
