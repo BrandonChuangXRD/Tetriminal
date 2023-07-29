@@ -99,8 +99,6 @@ class game_display():
     # TODO
     def color_init(self):
         #need three routes for no color, color, fancy custom colors
-        if not curses.can_change_color():
-            return False
         global COLOR_CODES
         curses.start_color()
         curses.use_default_colors()

@@ -48,7 +48,6 @@ class Rotate():
     def _counter_clockwise(self, grid: list, piece: tetrimino.Piece) -> bool:
         initial_orientation = piece.orientation
         piece.spin_ccw()
-        print(self.kick_dict[piece.shape][initial_orientation][piece.orientation])
         for kick in self.kick_dict[piece.shape][initial_orientation][piece.orientation]:
             piece.y += kick[0]
             piece.x += kick[1]
@@ -64,7 +63,6 @@ class Rotate():
     def _clockwise(self, grid: list, piece: tetrimino.Piece) -> bool:
         initial_orientation = piece.orientation
         piece.spin_cw()
-        print(self.kick_dict[piece.shape][initial_orientation][piece.orientation])
         for kick in self.kick_dict[piece.shape][initial_orientation][piece.orientation]:
             piece.y += kick[0]
             piece.x += kick[1]
