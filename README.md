@@ -1,23 +1,30 @@
 # Tetriminal
-An infinite tetris game using SRS and 7 bag, running entirely in the terminal using curses. Tries to mimic the Zen gamemode in [TETR.IO](https://tetr.io/)
+An X Application of an infinite tetris game using SRS and 7 bag, using curses for the display and pynput for the inputs. Tries to mimic the Zen gamemode in [TETR.IO](https://tetr.io/)
 
-## Default Controls and Handling
+## Controls and Handling
 | Control | Default Key |
 | ------- | ----------- |
-| 
+| up | up arrow |
+| soft drop | down arrow |
+| left | left arrow |
+| right | right arrow |
+| hard drop | space |
+| counter-clockwise | z |
+| clockwise | x |
+| 180-spin | a |
+| hold | c |
 
 | Handling | Default Value |
 | -------- | ------------- |
-
-ARR: 2F
-DAS: 10F
-DCD: 0F
-SDF: 6x
-DAS Direction Cancel: on
-Prevent accidental Hard Drops: on
-a
+| ARR (Auto-Repeat Rate) | 2 F(rames) |
+| DAS (Delayed Auto-Shift) | 10 F(rames) |
+| DCD (DAS Cut Delay) | 0 F(rames) |
+| DAS Direction Cancel | on |
+| Prevent accidental hard drops | off |
 
 ## Installation and Execution
+As an X application, this requires an X11 terminal or similar (ex: xterm). Otherwise, the inputs will not register at all.
+
 the `pynput` library is required to run this program. This can be done using the following command:
 
 ```pip install pynput```
@@ -25,7 +32,9 @@ the `pynput` library is required to run this program. This can be done using the
 this can be run with the command `python3 main.py` as of now. the `-d` flag runs the debug mode, which currently only tests the screen and a few inputs.
 
 ## Problems, Contradictions, and Possible Future Developments
-- This program does not run properly in WSL (Windows Subsystem for Linux).
+- Due to the modularization, it is possible in the future this gets expanded to include 40 line, blitz, and custom room creations (just like TETR.IO).
+- the SRS kick table is implemented instead of SRS+, so the I kicks are not the same as TETR.IO.
+- need to implement preventing accidental hard drops
 
 ## Credits and Method Reasonings
 - Thank you to the developers behind the [pynput](https://github.com/moses-palmer/pynput) on github for the pynput library. The curses library was insufficent for this project due to the lack of "release events" for keys.
