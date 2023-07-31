@@ -24,6 +24,10 @@ An X Application of an infinite tetris game using SRS and 7 bag, using curses fo
 
 ## Installation and Execution
 As an X application, this requires an X11 terminal or similar (ex: xterm). Otherwise, the inputs will not register at all.
+This was done because X11 seems to be the only way for inputs to be registered as actions (key down, key up). The curses library
+only records inputs like it is being typed, were it registers one press, then waits, then spams the key. Its possible to get it to work on other
+terminals (such as wayland) with root access, but I did not really understand these issues until later. In the future maybe I will make it
+compatible.
 
 the `pynput` library is required to run this program. This can be done using the following command:
 
