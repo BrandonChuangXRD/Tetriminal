@@ -68,7 +68,7 @@ def main():
     if args.zen:
         zen.start()
     else:
-        screen.game_display("zen")
+        zen.start()
     return 1
 
 

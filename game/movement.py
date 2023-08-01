@@ -146,7 +146,7 @@ class MoveStates():
             self.key_time[LEFT] = self.timer
             self.repeat_times[LEFT] = self.timer+self.handle.DAS
         elif LEFT in keys and LEFT in self.key_time.keys():
-            if self.handle.ARR == 0:
+            if self.handle.ARR == 0 and self.repeat_times[LEFT] <= self.timer:
                 self._left_inf(grid, piece)
             elif self.repeat_times[LEFT] <= self.timer:
                 self._left(grid, piece)
@@ -165,7 +165,7 @@ class MoveStates():
             self.key_time[RIGHT] = self.timer
             self.repeat_times[RIGHT] = self.timer+self.handle.DAS
         elif RIGHT in keys and RIGHT in self.key_time.keys():
-            if self.handle.ARR == 0:
+            if self.handle.ARR == 0 and self.repeat_times[RIGHT] <= self.timer:
                 self._right_inf(grid, piece)
             elif self.repeat_times[RIGHT] <= self.timer:
                 self._right(grid, piece)
